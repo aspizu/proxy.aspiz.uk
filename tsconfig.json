@@ -4,7 +4,7 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "noEmit": true,
-    "types": ["node"]
+    "types": ["node", "./worker-configuration.d.ts"]
   },
   "include": ["./src/"]
 }
