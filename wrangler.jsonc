@@ -1,0 +1,8 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "proxy",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-04-18",
+  "upload_source_maps": true,
+  "compatibility_flags": ["nodejs_compat"],
+}
