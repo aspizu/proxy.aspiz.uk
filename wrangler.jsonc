@@ -5,4 +5,10 @@
   "compatibility_date": "2026-04-18",
   "upload_source_maps": true,
   "compatibility_flags": ["nodejs_compat"],
+  "routes": [
+    {
+      "pattern": "proxy.aspiz.uk",
+      "zone_name": "aspiz.uk",
+    },
+  ],
 }
