@@ -36,6 +36,10 @@ export default new Hono()
         message: "Path or X-Proxy-Target must be valid URL.",
       })
     }
+    target.searchParams.delete("cors-origin")
+    target.searchParams.delete("cors-methods")
+    target.searchParams.delete("cors-headers")
+    target.searchParams.delete("cors-max-age")
     const headers = new Headers(c.req.raw.headers)
     headers.delete("X-Proxy-Method")
     headers.delete("X-Proxy-Target")
@@ -47,10 +51,18 @@ export default new Hono()
     headers.delete("CF-Connecting-IP")
     headers.delete("X-Forwarded-For")
     headers.delete("X-Real-IP")
-    const allowOrigin = c.req.header("X-Proxy-Access-Control-Allow-Origin")
-    const allowMethods = c.req.header("X-Proxy-Access-Control-Allow-Methods")
-    const allowHeaders = c.req.header("X-Proxy-Access-Control-Allow-Headers")
-    const maxAge = c.req.header("X-Proxy-Access-Control-Max-Age")
+    const allowOrigin =
+      c.req.header("X-Proxy-Access-Control-Allow-Origin") ||
+      incoming.searchParams.get("cors-origin")
+    const allowMethods =
+      c.req.header("X-Proxy-Access-Control-Allow-Methods") ||
+      incoming.searchParams.get("cors-methods")
+    const allowHeaders =
+      c.req.header("X-Proxy-Access-Control-Allow-Headers") ||
+      incoming.searchParams.get("cors-headers")
+    const maxAge =
+      c.req.header("X-Proxy-Access-Control-Max-Age") ||
+      incoming.searchParams.get("cors-max-age")
     const method = c.req.header("X-Proxy-Method") || c.req.method
     if (method === "OPTIONS" && (allowOrigin || allowMethods || allowHeaders)) {
       const res = new Response(null)
