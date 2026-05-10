@@ -80,24 +80,28 @@ export default new Hono()
       }
       return res
     }
-    const res = await fetch(target, {
+    const upstream = await fetch(target, {
       method,
       headers,
       body: method === "GET" || method === "HEAD" ? undefined : c.req.raw.body,
       redirect: "follow",
       credentials: "include",
     })
+    const resHeaders = new Headers(upstream.headers)
     if (allowOrigin) {
-      res.headers.set("Access-Control-Allow-Origin", allowOrigin)
+      resHeaders.set("Access-Control-Allow-Origin", allowOrigin)
     }
     if (allowMethods) {
-      res.headers.set("Access-Control-Allow-Methods", allowMethods)
+      resHeaders.set("Access-Control-Allow-Methods", allowMethods)
     }
     if (allowHeaders) {
-      res.headers.set("Access-Control-Allow-Headers", allowHeaders)
+      resHeaders.set("Access-Control-Allow-Headers", allowHeaders)
     }
     if (maxAge) {
-      res.headers.set("Access-Control-Max-Age", maxAge)
+      resHeaders.set("Access-Control-Max-Age", maxAge)
     }
-    return res
+    return new Response(upstream.body, {
+      status: upstream.status,
+      headers: resHeaders,
+    })
   })
